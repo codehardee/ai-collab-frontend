@@ -100,41 +100,24 @@ const Project = () => {
     }, [webContainer]); // Add webContainer as a dependency
 
     useEffect(() => {
+    if (!project || !project._id) return;
 
-          if (!project) {
-            // Fallback: fetch project data for logged-in user
-            axios.get('/projects/user') // Update this endpoint to match your backend
-                .then(res => {
-                    setProject(res.data.project);
-                })
-                .catch(err => {
-                    console.error("Failed to load project:", err);
-                    navigate('/home'); // fallback
-                });
-            return;
-        }
+    const socket = initializeSocket(project._id);
+    receiveMessage('project-message', handleMessage);
 
-        // Initialize socket connection
-        const socket = initializeSocket(project._id);
+    if (!webContainer) {
+        getWebContainer().then((container) => {
+            setWebContainer(container);
+            console.log("WebContainer started");
+        });
+    }
 
-        // Attach the message handler
-        receiveMessage('project-message', handleMessage);
-
-        // Initialize WebContainer if not already initialized
-        if (!webContainer) {
-            getWebContainer().then((container) => {
-                setWebContainer(container);
-                console.log("WebContainer started");
-            });
-        }
-
-        // Cleanup function to remove the event listener and disconnect the socket
-        return () => {
-            console.log("Cleaning up socket listeners...");
-            socket.off('project-message', handleMessage); // Remove the event listener
-            socket.disconnect(); // Disconnect the socket
-        };
-    }, [project._id, handleMessage]); // Add project._id and handleMessage as dependencies
+    return () => {
+        console.log("Cleaning up socket listeners...");
+        socket.off('project-message', handleMessage);
+        socket.disconnect();
+    };
+}, [project?._id, handleMessage]);// Add project._id and handleMessage as dependencies
 
     const handleUserClick = (id) => {
         setSelectedUserId((prev) => {
