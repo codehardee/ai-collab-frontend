@@ -28,7 +28,7 @@ const Login = () => {
             setUser(res.data.user);
 
             // Navigate only once
-            navigate('/project');
+            navigate('/home');
         } catch (err) {
             console.error(err.response?.data || "Login failed");
             setError(err.response?.data?.message || "Invalid credentials"); // Show error message
