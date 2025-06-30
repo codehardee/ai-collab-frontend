@@ -54,7 +54,7 @@ const Project = () => {
     const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedUserId, setSelectedUserId] = useState(new Set());
-    const [project, setProject] = useState(location.state.project);
+    const [project, setProject] = useState(location.state?.project || null);
     const [message, setMessage] = useState('');
     const [users, setUsers] = useState([]);
     const [messages, setMessages] = useState([]);
@@ -100,6 +100,13 @@ const Project = () => {
     }, [webContainer]); // Add webContainer as a dependency
 
     useEffect(() => {
+
+          if (!project) {
+            console.warn("No project found in location.state. Redirecting...");
+            navigate('/'); 
+            return;
+        }
+
         // Initialize socket connection
         const socket = initializeSocket(project._id);
 
