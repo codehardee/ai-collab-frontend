@@ -102,8 +102,15 @@ const Project = () => {
     useEffect(() => {
 
           if (!project) {
-            console.warn("No project found in location.state. Redirecting...");
-            navigate('/'); 
+            // Fallback: fetch project data for logged-in user
+            axios.get('/projects/user') // Update this endpoint to match your backend
+                .then(res => {
+                    setProject(res.data.project);
+                })
+                .catch(err => {
+                    console.error("Failed to load project:", err);
+                    navigate('/home'); // fallback
+                });
             return;
         }
 
