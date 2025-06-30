@@ -6,14 +6,14 @@ import { UserContext } from '../context/user.context';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(null); // ✅ New state to store errors
+    const [error, setError] = useState(null); //New state to store errors
     const { setUser } = useContext(UserContext);
     const navigate = useNavigate();
 
     const submitHandler = async (e) => {
         e.preventDefault();
 
-        // ✅ Simple form validation
+        // Simple form validation
         if (!email.trim() || !password.trim()) {
             setError("Email and password are required!");
             return;
@@ -23,15 +23,15 @@ const Login = () => {
             const res = await axios.post('/users/login', { email, password });
             console.log(res.data);
 
-            // ✅ Save token & user info
+            // Save token & user info
             localStorage.setItem('token', res.data.token);
             setUser(res.data.user);
 
-            // ✅ Navigate only once
-            navigate('/');
+            // Navigate only once
+            navigate('/project');
         } catch (err) {
             console.error(err.response?.data || "Login failed");
-            setError(err.response?.data?.message || "Invalid credentials"); // ✅ Show error message
+            setError(err.response?.data?.message || "Invalid credentials"); // Show error message
         }
     };
 
@@ -40,7 +40,7 @@ const Login = () => {
             <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
                 <h2 className="text-2xl font-bold text-white mb-6">Login</h2>
 
-                {error && <p className="text-red-500 mb-4">{error}</p>} {/* ✅ Display error messages */}
+                {error && <p className="text-red-500 mb-4">{error}</p>} {/*Display error messages */}
 
                 <form onSubmit={submitHandler}>
                     <div className="mb-4">
