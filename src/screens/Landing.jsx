@@ -72,7 +72,7 @@ const Landing = () => {
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white text-center py-6">
-        <p>&copy; {new Date().getFullYear()} DevAI. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Hardee. All rights reserved.</p>
       </footer>
     </div>
   );
